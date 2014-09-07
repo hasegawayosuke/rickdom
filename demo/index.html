@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>RickDOM DEMO - ricking DOM safety from string</title>
+<script>
+window.addEventListener( "DOMContentLoaded", function(){
+    var rickdom = new RickDOM();
+
+    document.getElementById( "allowings" ).value = JSON.stringify( rickdom.allowings, undefined, 4 );
+
+    document.getElementById( "sanitize" ).addEventListener( "click", function( evt ){
+        var htmlString = document.getElementById( "html" ).value;
+        var container = document.getElementById( "container" );
+        var htmlsource = document.getElementById( "htmlsource" );
+        var builder, elms;
+
+        rickdom.allowings = JSON.parse( document.getElementById( "allowings" ).value );
+        elms = rickdom.build( htmlString );
+
+        container.innerHTML = "";
+        container.style.display = "block";
+        for( var i = 0; i < elms.length; i++ ){
+            container.appendChild( elms[ i ] );
+        }
+        htmlsource.textContent = container.innerHTML;
+        htmlsource.style.display= "block";
+
+    }, false );
+}, false );
+
+</script>
+</head>
+<body>
+<h1>RickDOM DEMO - ricking DOM safety from string</h1>
+<a href="https://github.com/hasegawayosuke/rickdom">RickDOM</a> is a javascript library to build DOM elements from string using DOMParser API or createHTMLDocument API of modern browsers.
+<div>
+<div>
+<label for="allows">Allowed elements, attributes:</label>
+</div>
+<textarea id="allowings" style="width:90%;height:20em">
+{
+    "a" : {
+        "title" : "",
+        "ping" : { "pattern" : "^https?:\\/\\/", "flag" : "i" },
+        "href" : { "pattern" : "^https?:\\/\\/", "flag" : "i" },
+        "class" : ""
+    },
+    "img" : {
+        "alt" : "",
+        "src" : "",
+        "title" : "",
+        "class" : ""
+    },
+    "div" : {
+        "class" : "",
+        "style" : {
+            "font-family" : {
+                "pattern" : "^\\s*(:?[\\w\\-]+|[\"'][\\w\\s\\-]+[\"'])\\s*$"
+            },
+            "font-size" : {
+                "pattern" : "^\\s*(?:(?:[\\d\\.]+(?:em|ex|px|%))|xx-small|x-small|small|medium|large|x-large|xx-large|larger|smaller)\\s*$",
+                "flag" : "i"
+            },
+            "color" : {
+                "pattern" : "^\\s*(?:#(?:[\\da-f]{3}|[\\da-f]{6})|rgb\\(\\s*(:?[\\d]+,?\\s*){3}\\))\\s*$",
+                "flag" : "i"
+             },
+            "background-color" : {
+                "pattern" : "^\\s*(?:#(?:[\\da-f]{3}|[\\da-f]{6})|rgb\\(\\s*(:?[\\d]+,?\\s*){3}\\))\\s*$",
+                "flag" : "i"
+            },
+            "border" : ""
+        }
+    },
+    "b" : {
+        "class" : ""
+    },
+    "s" : {
+        "class" : ""
+    },
+    "i" : {
+        "class" : ""
+    },
+    "br" : {
+        "class" : ""
+    }
+}
+</textarea>
+</div>
+<div>
+<div>
+<label for="html">HTML:</label>
+</div>
+<textarea id="html" style="width:90%;height:8em;">
+<div style="font-size:120%;color:#00d;background-color:#eee;margin:1em;padding:1em;border:solid 2px red">
+    <b>Hello, Sanitize</b><br>
+    <a href="javascript:alert(1)" style="color:#c00">link to javascript</a>&nbsp;<a href="http://utf-8.jp" style="color:#c00">link to utf-8.jp</a><br>
+</div><img src=# onerror=alert(1)>
+</textarea>
+</div>
+<input type="button" value="build elements" id="sanitize">
+<div id="container" style="padding:0.2em;border:solid 1px silver;display:none;width:90%"></div>
+<div id="htmlsource" style="padding:0.2em;border:solid 1px silver;font-family:monospace;width:90%;display:none;"></div>
+<script src="rickdom-0.1.js"></script>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-340076-6";
+urchinTracker();
+</script>
+</body>
+</html>
+
